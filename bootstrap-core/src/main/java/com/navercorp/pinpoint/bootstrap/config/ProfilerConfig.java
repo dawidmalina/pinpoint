@@ -175,4 +175,8 @@ public interface ProfilerConfig {
 
     boolean readBoolean(String propertyName, boolean defaultValue);
 
+    boolean isProfilerJvmCollectThreadsMetrics();
+
+    void setProfilerJvmCollectThreadsMetrics(boolean profilerJvmCollectThreadsMetrics);
+
 }

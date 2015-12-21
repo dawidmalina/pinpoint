@@ -31,6 +31,7 @@ import com.navercorp.pinpoint.profiler.monitor.codahale.gc.ParallelDetailedMetri
 import com.navercorp.pinpoint.profiler.monitor.codahale.gc.SerialCollector;
 import com.navercorp.pinpoint.profiler.monitor.codahale.gc.SerialDetailedMetricsCollector;
 import com.navercorp.pinpoint.profiler.monitor.codahale.gc.UnknownGarbageCollector;
+import com.navercorp.pinpoint.profiler.monitor.codahale.threads.ThreadsCollector;
 import com.navercorp.pinpoint.profiler.monitor.codahale.tps.TransactionMetricCollector;
 import com.navercorp.pinpoint.profiler.monitor.codahale.tps.metric.TransactionMetricSet;
 
@@ -53,12 +54,14 @@ public class AgentStatCollectorFactory {
     private final GarbageCollector garbageCollector;
     private final CpuLoadCollector cpuLoadCollector;
     private final TransactionMetricCollector transactionMetricCollector;
+    private final ThreadsCollector threadsCollector;
 
     public AgentStatCollectorFactory(TransactionCounter transactionCounter, ProfilerConfig profilerConfig) {
         this.monitorRegistry = createRegistry();
         this.garbageCollector = createGarbageCollector(profilerConfig.isProfilerJvmCollectDetailedMetrics());
         this.cpuLoadCollector = createCpuLoadCollector();
         this.transactionMetricCollector = createTransactionMetricCollector(transactionCounter);
+        this.threadsCollector = createThreadsCollector();
     }
 
     private MetricMonitorRegistry createRegistry() {
@@ -121,6 +124,14 @@ public class AgentStatCollectorFactory {
         return new TransactionMetricCollector(transactionMetricSet);
     }
 
+    private ThreadsCollector createThreadsCollector() {
+        ThreadStatesGaugeSet threadsMetricSet = this.monitorRegistry.registerJvmThreadStatesMonitor(new MonitorName(MetricMonitorValues.THREAD_STATES));
+        if (logger.isInfoEnabled()) {
+            logger.info("loaded : Default ThreadStatesGaugeSet");
+        }
+        return new ThreadsCollector(threadsMetricSet);
+    }
+
     public GarbageCollector getGarbageCollector() {
         return this.garbageCollector;
     }
@@ -131,6 +142,10 @@ public class AgentStatCollectorFactory {
 
     public TransactionMetricCollector getTransactionMetricCollector() {
         return this.transactionMetricCollector;
+    }
+
+    public ThreadsCollector getThreadsCollector() {
+        return this.threadsCollector;
     }
 
 }

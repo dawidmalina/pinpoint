@@ -66,6 +66,15 @@ struct TCpuLoad {
     2: optional double       systemCpuLoad
 }
 
+struct TJvmThreads {
+    1: optional i64 timedWaitingCount
+    2: optional i64 waitingCount
+    3: optional i64 newCount
+    4: optional i64 blockedCount
+    5: optional i64 runnableCount
+    6: optional i64 terminatedCount
+}
+
 struct TTransaction {
     2: optional i64     sampledNewCount
     3: optional i64     sampledContinuationCount
@@ -81,7 +90,8 @@ struct TAgentStat {
     10: optional TJvmGc     gc
     20: optional TCpuLoad   cpuLoad
     30: optional TTransaction   transaction
-    200: optional string    metadata    
+    40: optional TJvmThreads   threads
+    200: optional string    metadata
 }
 
 struct TAgentStatBatch {

@@ -23,7 +23,6 @@ import java.util.Map;
 import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Metric;
 import com.navercorp.pinpoint.profiler.monitor.codahale.AgentStatCollector;
-import com.navercorp.pinpoint.profiler.monitor.codahale.MetricMonitorValues;
 import com.navercorp.pinpoint.profiler.monitor.codahale.cpu.metric.CpuLoadMetricSet;
 import com.navercorp.pinpoint.thrift.dto.TCpuLoad;
 
@@ -35,14 +34,13 @@ public class CpuLoadCollector implements AgentStatCollector<TCpuLoad>{
     private final Gauge<Double> jvmCpuLoadGauge;
     private final Gauge<Double> systemCpuLoadGauge;
 
-    @SuppressWarnings("unchecked")
     public CpuLoadCollector(CpuLoadMetricSet cpuLoadMetricSet) {
         if (cpuLoadMetricSet == null) {
             throw new NullPointerException("cpuLoadMetricSet must not be null");
         }
         Map<String, Metric> metrics = cpuLoadMetricSet.getMetrics();
-        this.jvmCpuLoadGauge = (Gauge<Double>)MetricMonitorValues.getMetric(metrics, CPU_LOAD_JVM, DOUBLE_ZERO);
-        this.systemCpuLoadGauge = (Gauge<Double>)MetricMonitorValues.getMetric(metrics, CPU_LOAD_SYSTEM, DOUBLE_ZERO);
+        this.jvmCpuLoadGauge = getDoubleGauge(metrics, CPU_LOAD_JVM, DOUBLE_ZERO);
+        this.systemCpuLoadGauge = getDoubleGauge(metrics, CPU_LOAD_SYSTEM, DOUBLE_ZERO);
     }
 
     @Override

@@ -168,6 +168,8 @@ public class DefaultProfilerConfig implements ProfilerConfig {
     private int profileJvmCollectInterval;
     private boolean profilerJvmCollectDetailedMetrics;
 
+    private boolean profilerJvmCollectThreadsMetrics;
+
     private Filter<String> profilableClassFilter = new SkipFilter<String>();
 
     private final long DEFAULT_AGENT_INFO_SEND_RETRY_INTERVAL = 5 * 60 * 1000L;
@@ -325,6 +327,15 @@ public class DefaultProfilerConfig implements ProfilerConfig {
     }
 
     @Override
+    public boolean isProfilerJvmCollectThreadsMetrics() {
+        return profilerJvmCollectThreadsMetrics;
+    }
+
+    @Override
+    public void setProfilerJvmCollectThreadsMetrics(boolean profilerJvmCollectThreadsMetrics) {
+        this.profilerJvmCollectThreadsMetrics = profilerJvmCollectThreadsMetrics;
+    }
+
     public boolean isProfilerJvmCollectDetailedMetrics() {
         return profilerJvmCollectDetailedMetrics;
     }
@@ -659,7 +670,7 @@ public class DefaultProfilerConfig implements ProfilerConfig {
         // JVM
         this.profileJvmCollectInterval = readInt("profiler.jvm.collect.interval", 1000);
         this.profilerJvmCollectDetailedMetrics = readBoolean("profiler.jvm.collect.detailed.metrics", false);
-
+        this.profilerJvmCollectThreadsMetrics = readBoolean("profiler.jvm.collect.threads.metrics", false);
         this.agentInfoSendRetryInterval = readLong("profiler.agentInfo.send.retry.interval", DEFAULT_AGENT_INFO_SEND_RETRY_INTERVAL);
 
         // service type

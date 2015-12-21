@@ -111,6 +111,23 @@ public final class MetricMonitorValues {
     public static final String TRANSACTION_UNSAMPLED_NEW = TRANSACTION + ".unsampled.new";
     public static final String TRANSACTION_UNSAMPLED_CONTINUATION = TRANSACTION + ".unsampled.continuation";
 
+    public static final String THREAD_STATES = "jvm.thread-states";
+    
+    // A thread that has not yet started is in this state.
+    public static final String THREAD_STATE_NEW = "new.count";
+    // A thread executing in the Java virtual machine is in this state.
+    public static final String THREAD_STATE_RUNNABLE = "runnable.count";
+    // A thread that is blocked waiting for a monitor lock is in this state.
+    public static final String THREAD_STATE_BLOCKED = "blocked.count";
+    // A thread that is waiting indefinitely for another thread to perform a particular action is in this state.
+    public static final String THREAD_STATE_WAITING = "waiting.count";
+    // A thread that is waiting for another thread to perform an action for up to a specified waiting time is in this state.
+    public static final String THREAD_STATE_TIMED_WAITING = "timed_waiting.count";
+    // A thread that has exited is in this state.
+    public static final String THREAD_STATE_TERMINATED = "terminated.count";
+    // A thread that has deadlocks state.
+    public static final String THREAD_DEADLOCKS = "deadlocks";
+
     private MetricMonitorValues() {
     }
 
@@ -126,6 +143,51 @@ public final class MetricMonitorValues {
             return defaultValue;
         }
         return gauge.getValue();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Gauge<Integer> getIntegerGauge(final Map<String, Metric> metrics, final String key, final Gauge<Integer> defaultMetric) {
+
+        Object metric = getMetric(metrics, key, defaultMetric);
+        if (metric instanceof Gauge<?>) {
+            Gauge<?> result = (Gauge<?>) metric;
+            Object value = result.getValue();
+            if (value instanceof Integer) {
+                return (Gauge<Integer>) result;
+            }
+        }
+
+        return defaultMetric;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Gauge<Long> getLongGauge(final Map<String, Metric> metrics, final String key, final Gauge<Long> defaultMetric) {
+
+        Object metric = getMetric(metrics, key, defaultMetric);
+        if (metric instanceof Gauge<?>) {
+            Gauge<?> result = (Gauge<?>) metric;
+            Object value = result.getValue();
+            if (value instanceof Long) {
+                return (Gauge<Long>) result;
+            }
+        }
+
+        return defaultMetric;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Gauge<Double> getDoubleGauge(final Map<String, Metric> metrics, final String key, final Gauge<Double> defaultMetric) {
+
+        Object metric = getMetric(metrics, key, defaultMetric);
+        if (metric instanceof Gauge<?>) {
+            Gauge<?> result = (Gauge<?>) metric;
+            Object value = result.getValue();
+            if (value instanceof Double) {
+                return (Gauge<Double>) result;
+            }
+        }
+
+        return defaultMetric;
     }
 
     public static <T extends Metric> T getMetric(final Map<String, T> metrics, final String key, final T defaultMetric) {
@@ -166,7 +228,7 @@ public final class MetricMonitorValues {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static Gauge<Long> getLongGauge(final SortedMap<String, Gauge> gauges, String key) {
+    public static Gauge<Long> getLongGauge(final SortedMap<String, Gauge> gauges, final String key) {
         if (gauges == null) {
             throw new NullPointerException("gauges must not be null");
         }
@@ -209,10 +271,12 @@ public final class MetricMonitorValues {
         return DOUBLE_ZERO;
     }
 
+	public static final Gauge<Integer> INTEGER_ZERO = new EmptyGauge<Integer>(0);
     public static final Gauge<Long> LONG_ZERO = new EmptyGauge<Long>(0L);
     public static final Gauge<Long> EXCLUDED_LONG = new EmptyGauge<Long>(null);
     public static final Gauge<Double> DOUBLE_ZERO = new EmptyGauge<Double>(0D);
     public static final Gauge<Double> EXCLUDED_DOUBLE = new EmptyGauge<Double>(null);
+    public static final Gauge<Long> UNSUPPORTED_GAUGE = new EmptyGauge<Long>(-1L);
 
     public static class EmptyGauge<T> implements Gauge<T> {
         private T emptyValue;
