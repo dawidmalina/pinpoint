@@ -10,6 +10,19 @@ pinpoint-hbase:
     - "2181:2181"
     - "16010:16010"
 
+pinpoint-mysql:
+  container_name: confluence-mysql
+  restart: always
+  image: sameersbn/mysql:latest
+  ports:
+    - "13306:3306"
+  environment:
+    - DB_USER=admin
+    - DB_PASS=admin
+    - DB_NAME=pinpoint
+    - MYSQL_CHARSET=utf8
+    - MYSQL_COLLATION=utf8_bin
+
 pinpoint-collector:
   container_name: pinpoint-collector
   hostname: collector
@@ -53,8 +66,13 @@ pinpoint-web:
     CLUSTER_ZOOKEEPER_ADDRESS: hbase
     ADMIN_PASSWORD: admin123
     DISABLE_DEBUG: 'true'
+    JDBC_DRIVER: com.mysql.jdbc.Driver
+    JDBC_URL: jdbc:mysql://mysql:3306/pinpoint?characterEncoding=UTF-8
+    JDBC_USERNAME: admin
+    JDBC_PASSWORD: admin
   links:
     - pinpoint-hbase:hbase
+    - pinpoint-mysql:mysql
 
 # only example
 #pinpoint-agent:
