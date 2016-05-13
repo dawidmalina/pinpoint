@@ -76,6 +76,8 @@
                     'DUBBO_PROVIDER_GROUP': 'DUBBO.png',
                     'JETTY': 'JETTY.png',
                     'JETTY_GROUP': 'JETTY.png',
+                    'JBOSS': 'JBOSS.png',
+                    'JBOSS_GROUP': 'JBOSS.png',
                     'UNDEFINED': 'UNDEFINED.png',
                     'UNDEFINED_GROUP': 'UNDEFINED.png',
                     'UNKNOWN': 'UNKNOWN.png',

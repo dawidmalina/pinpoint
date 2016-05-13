@@ -46,6 +46,8 @@ import static com.navercorp.pinpoint.common.trace.ServiceTypeProperty.*;
  * <tr><td>1021</td><td><i>RESERVED</i></td></tr>
  * <tr><td>1030</td><td>JETTY</td></tr>
  * <tr><td>1031</td><td>JETTY_METHOD</td></tr>
+ * <tr><td>1040</td><td>JBOSS</td></tr>
+ * <tr><td>1041</td><td>JBOSS_METHOD</td></tr>
  * <tr><td>1100</td><td>THRIFT_SERVER</td></tr>
  * <tr><td>1101</td><td>THRIFT_SERVER_INTERNAL</td></tr>
  * <tr><td>1110</td><td>DUBBO_PROVIDER</td></tr>
